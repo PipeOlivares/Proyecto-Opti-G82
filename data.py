@@ -1,7 +1,14 @@
 ##############
 #### DATA ####
 ##############
-from abrir_datos import alimentos,volAlimento,qInicialAlimento,costoAlimento,vencimientoPeriodo, qNutrientesAlimentos
+from abrir_datos import (
+    alimentos,
+    volAlimento,
+    qInicialAlimento,
+    costoAlimento,
+    vencimientoPeriodo,
+    qNutrientesAlimentos,
+)
 
 # qNutrientesAlimentos, volCaja, minNutriente, qPersonas, minProductos, maxProductos,
 # vencimiento, volAlimento, qRescatado, qInicialAlimento, qDonaciones, qInicialDinero,
@@ -9,9 +16,9 @@ from abrir_datos import alimentos,volAlimento,qInicialAlimento,costoAlimento,ven
 
 #### CONJUNTOS ####
 
-print (alimentos)
+print(alimentos)
 
-dias = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+dias = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 ## considerar parametro K_t para el numero de cajas posibles en un dia
 cajas = [1, 2, 3, 4, 5, "etc"]
@@ -24,7 +31,7 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 ####################
 
 ## U_ik ## Valor nutricional del alimento i con respecto al nutriente k
-print (qNutrientesAlimentos) 
+print(qNutrientesAlimentos)
 
 ## M ## Volumen caja
 volCaja = int(0)
@@ -83,3 +90,18 @@ volBodega = int(5)  # valor
 
 ## K_t ## Maxima cantidad de cajas generadas por trabajadores en un dia
 maxCajas = int(10)
+
+## ?? ## NOSE SI ES EXACTAMENTE UN PARAMETRO, pero es el orden de importacion
+crearCajaDia = {
+    dias[0]: {cajas[0]: 1, cajas[1]: 1, cajas[2]: 0, cajas[3]: 0, cajas[4]: "ETC"},
+    dias[1]: {cajas[0]: 0, cajas[1]: 0, cajas[2]: 1, cajas[3]: 0, cajas[4]: "ETC"},
+}
+
+## T ## Tarifa inicial segun numero de repartidores
+tarifa = int(12)
+
+## Km_j ## Distancia (km) que recorre caja j antes de llegar a su destino
+distanciaCaja = {cajas[0]: int(2), cajas[1]: int(5), cajas[2]: "ETC"}
+
+## Q ## Costo por kilometro recorrido
+cDistancia = int(5)
