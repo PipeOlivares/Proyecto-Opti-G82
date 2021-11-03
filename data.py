@@ -8,65 +8,84 @@
 
 #### CONJUNTOS ####
 
-alimentos = {}
+alimentos = []
 
-dias = {}
+dias = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-cajas = {}
+## considerar parametro K_t para el numero de cajas posibles en un dia
+cajas = [1, 2, 3, 4, 5, "etc"]
 
-nutrientes = {}
+## caso de nutrientes que no esten en un alimentos sera 0
+nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 
 ####################
 #### PARAMETROS ####
 ####################
 
 ## U_ik ## Valor nutricional del alimento i con respecto al nutriente k
-qNutrientesAlimentos = {}
+qNutrientesAlimentos = {
+    alimentos[0]: {
+        nutrientes[0]: 100,
+        nutrientes[1]: 13223,
+        nutrientes[2]: 1425,
+        nutrientes[3]: "ETC",
+    }
+}
 
 ## M ## Volumen caja
-volCaja = {}
+volCaja = int(0)
 
 ## N_k ## Cantidad minima nutriente k en caja por persona
-minNutriente = {}
+minNutriente = {
+    nutrientes[0]: 100,
+    nutrientes[1]: 13223,
+    nutrientes[2]: 245,
+    nutrientes[3]: "ETC",
+}
 
 ## P_n ## Cantidad de personas destinadas en una caja
-qPersonas = {}
+qPersonas = int(0)  # 4
 
 ## H ## Minimo de productos distintos por caja
-minProductos = {}
+minProductos = int(0)
 
 ## S ## Maximo de productos distintos por caja
-maxProductos = {}
+maxProductos = int(0)
 
 ## C_i ## Maximo de dias que alimento i puede ser enviado en caja
-vencimiento = {}
+## Dias hasta que la caja va a ser enviada??
+vencimiento = int(0)  #### NOT SURE WHAT IT IS ####
 
 ## A_i ## Volumen de alimento i
-volAlimento = {}
+volAlimento = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
 
 ## R_it ## Cantidad de alimento i rescatado en dia t
-qRescatado = {}
+qRescatado = {
+    dias[0]: {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"},
+    dias[1]: {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"},
+    dias[2]: {"ETC"},
+}
 
 ## R_i0 ## Inventario inicial alimento i
-qInicialAlimento = {}
+qInicialAlimento = {alimentos[0]: int(10)}
 
 ## G_t ## Cantidad de dinero guardado en dia t
-qDinero = {}
+qDinero = {dias[0]: int(0)}
 
 ## D_t ## Cantidad dinero donado en dia t
-qDonaciones = {}
+qDonaciones = {dias[0]: int(0)}  # int del dinero
 
 ## L_0 ## Cantidad dinero inicial
-qInicialDinero = {}
+qInicialDinero = int(0)
 
 ## W_i ## Costo comprar alimento i
-costoAlimento = {}
+costoAlimento = {alimentos[0]: "costo"}  # valor
 
-## V_it ## Dias desde el periodo t hasta que venza alimento
-vencimientoPeriodo = {}
+## V_it ## Dias desde el periodo t hasta que venza alimento i
+vencimientoPeriodo = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
 
 ## J ## Volumen util de bodega
-volBodega = {}
+volBodega = int(5)  # valor
 
 ## K_t ## Maxima cantidad de cajas generadas por trabajadores en un dia
-maxCajas = {}
+maxCajas = int(10)
