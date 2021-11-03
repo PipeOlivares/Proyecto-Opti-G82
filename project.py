@@ -5,6 +5,8 @@ from gurobipy import GRB, Model, quicksum
 
 
 #### PARAMETROS ####
+from abrir_datos import alimentos,volAlimento,qInicialAlimento,costoAlimento,vencimientoPeriodo, qNutrientesAlimentos
+
 from data import (
     alimentos,
     dias,

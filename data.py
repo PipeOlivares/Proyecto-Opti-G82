@@ -1,6 +1,7 @@
 ##############
 #### DATA ####
 ##############
+from abrir_datos import alimentos,volAlimento,qInicialAlimento,costoAlimento,vencimientoPeriodo, qNutrientesAlimentos
 
 # qNutrientesAlimentos, volCaja, minNutriente, qPersonas, minProductos, maxProductos,
 # vencimiento, volAlimento, qRescatado, qInicialAlimento, qDonaciones, qInicialDinero,
@@ -8,7 +9,7 @@
 
 #### CONJUNTOS ####
 
-alimentos = []
+print (alimentos)
 
 dias = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
@@ -23,14 +24,7 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 ####################
 
 ## U_ik ## Valor nutricional del alimento i con respecto al nutriente k
-qNutrientesAlimentos = {
-    alimentos[0]: {
-        nutrientes[0]: 100,
-        nutrientes[1]: 13223,
-        nutrientes[2]: 1425,
-        nutrientes[3]: "ETC",
-    }
-}
+print (qNutrientesAlimentos) 
 
 ## M ## Volumen caja
 volCaja = int(0)
