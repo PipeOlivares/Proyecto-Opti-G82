@@ -5,7 +5,28 @@ from gurobipy import GRB, Model, quicksum
 
 
 #### PARAMETROS ####
-from data import alimentos, dias, cajas, nutrientes, _
+from data import (
+    alimentos,
+    dias,
+    cajas,
+    nutrientes,
+    qNutrientesAlimentos,
+    volCaja,
+    minNutriente,
+    qPersonas,
+    minProductos,
+    maxProductos,
+    vencimiento,
+    volAlimento,
+    qRescatado,
+    qInicialAlimento,
+    qDonaciones,
+    qInicialDinero,
+    costoAlimento,
+    vencimientoPeriodo,
+    volBodega,
+    maxCajas,
+)
 
 
 #### MODELO ####
@@ -26,7 +47,11 @@ model.update()
 objective = quicksum(quicksum(bCaja for caja in cajas) for dia in dias)
 
 
+#######################
 #### RESTRICCIONES ####
+#######################
+
+## N1 ## Naturaleza X_ijt
 
 
 #### RESULTADO ####
