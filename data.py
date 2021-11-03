@@ -1,0 +1,7 @@
+alimentos = {}
+
+dias = {}
+
+cajas = {}
+
+nutrientes = {}
