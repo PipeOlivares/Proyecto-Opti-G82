@@ -8,6 +8,13 @@ from abrir_datos import (
     costoAlimento,
     vencimientoPeriodo,
     qNutrientesAlimentos,
+    minProductos,
+    maxProductos,
+    maxCajas    ,
+    volBodega   ,
+    qPersonas   ,
+    volCaja     ,
+    minNutriente
 )
 
 # qNutrientesAlimentos, volCaja, minNutriente, qPersonas, minProductos, maxProductos,
@@ -32,27 +39,27 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 ####################
 
 ## U_ik ## Valor nutricional del alimento i con respecto al nutriente k
-print(qNutrientesAlimentos)
+# print(qNutrientesAlimentos)
 
 ## M ## Volumen caja
-volCaja = 20
+# volCaja = 20
 
 ## N_k ## Cantidad minima nutriente k en caja por persona
-minNutriente = {
-    nutrientes[0]: 5600,
-    nutrientes[1]: 28000,
-    nutrientes[2]: 16800,
-    nutrientes[3]: 56000,
-}
+# minNutriente = {
+#     nutrientes[0]: 5600,
+#     nutrientes[1]: 28000,
+#     nutrientes[2]: 16800,
+#     nutrientes[3]: 56000,
+# }
 
 ## P_n ## Cantidad de personas destinadas en una caja
-qPersonas = int(4)  # 4
+# qPersonas = int(4)  # 4
 
 ## H ## Minimo de productos distintos por caja
-minProductos = int(0)
+# minProductos = 12
 
 ## S ## Maximo de productos distintos por caja
-maxProductos = int(0)
+# maxProductos = 25
 
 ## C_i ## Maximo de dias que alimento i puede ser enviado en caja
 ## Dias hasta que la caja va a ser enviada??
@@ -81,16 +88,16 @@ qDonaciones = {dias[0]: int(0)}  # int del dinero
 qInicialDinero = int(0)
 
 ## W_i ## Costo comprar alimento i
-costoAlimento = {alimentos[0]: "costo"}  # valor
+# costoAlimento = {alimentos[0]: "costo"}  # valor
 
 ## V_it ## Dias desde el periodo t hasta que venza alimento i
 vencimientoPeriodo = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
 
 ## J ## Volumen util de bodega
-volBodega = int(5)  # valor
+# volBodega = int(5)  # valor
 
 ## K_t ## Maxima cantidad de cajas generadas por trabajadores en un dia
-maxCajas = int(10)
+# maxCajas = int(10)
 
 ## ?? ## NOSE SI ES EXACTAMENTE UN PARAMETRO, pero es el orden de importacion
 ## esto esta hard de hacer porque estariamos dando el numero de cajas hechas en un dia con esos parametros
