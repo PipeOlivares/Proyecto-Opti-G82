@@ -209,7 +209,7 @@ model.addConstrs(
 model.addConstrs(
     (
         quicksum(qAlimentoCaja[alimento][caja][dia] for alimento in alimentos)
-        <= bCaja[caja][dia] * float("inf")
+        <= bCaja[caja][dia] * float("inf")  ## BigM lo deje como máximo
         for caja in cajas
         for dia in dias
     ),
@@ -227,7 +227,25 @@ model.addConstrs(
 )
 
 ## R12 ## Relacion de variable I_ij con X_ijt
-
+model.addConstrs(
+    (
+        bAlimentoCaja[alimento][caja] * float("inf")
+        >= qAlimentoCaja[alimento][caja][dia]
+        for alimento in alimentos
+        for caja in cajas
+        for dia in dias
+    ),
+    name="Relacion con multiplicador de I_ij con X_ijt",
+)
+model.addConstrs(
+    (
+        qAlimentoCaja[alimento][caja][dia] >= bAlimentoCaja[alimento][caja]
+        for alimento in alimentos
+        for caja in cajas
+        for dia in dias
+    ),
+    name="Relacion sin multiplicador de I_ij con X_ijt",
+)
 
 # N1 ## Naturaleza X_ijt
 model.addConstrs(

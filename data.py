@@ -14,6 +14,7 @@ from abrir_datos import (
 # vencimiento, volAlimento, qRescatado, qInicialAlimento, qDonaciones, qInicialDinero,
 # costoAlimento, vencimientoPeriodo, volBodega, maxCajas
 
+
 #### CONJUNTOS ####
 
 print(alimentos)
@@ -34,18 +35,18 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 print(qNutrientesAlimentos)
 
 ## M ## Volumen caja
-volCaja = int(0)
+volCaja = 20
 
 ## N_k ## Cantidad minima nutriente k en caja por persona
 minNutriente = {
-    nutrientes[0]: 100,
-    nutrientes[1]: 13223,
-    nutrientes[2]: 245,
-    nutrientes[3]: "ETC",
+    nutrientes[0]: 5600,
+    nutrientes[1]: 28000,
+    nutrientes[2]: 16800,
+    nutrientes[3]: 56000,
 }
 
 ## P_n ## Cantidad de personas destinadas en una caja
-qPersonas = int(0)  # 4
+qPersonas = int(4)  # 4
 
 ## H ## Minimo de productos distintos por caja
 minProductos = int(0)
@@ -55,7 +56,7 @@ maxProductos = int(0)
 
 ## C_i ## Maximo de dias que alimento i puede ser enviado en caja
 ## Dias hasta que la caja va a ser enviada??
-vencimiento = int(0)  #### NOT SURE WHAT IT IS ####
+vencimiento = int(10)  #### NOT SURE WHAT IT IS ####
 
 ## A_i ## Volumen de alimento i
 volAlimento = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
@@ -92,6 +93,7 @@ volBodega = int(5)  # valor
 maxCajas = int(10)
 
 ## ?? ## NOSE SI ES EXACTAMENTE UN PARAMETRO, pero es el orden de importacion
+## esto esta hard de hacer porque estariamos dando el numero de cajas hechas en un dia con esos parametros
 crearCajaDia = {
     dias[0]: {cajas[0]: 1, cajas[1]: 1, cajas[2]: 0, cajas[3]: 0, cajas[4]: "ETC"},
     dias[1]: {cajas[0]: 0, cajas[1]: 0, cajas[2]: 1, cajas[3]: 0, cajas[4]: "ETC"},
