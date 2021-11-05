@@ -83,10 +83,10 @@ vencimiento = int(10)  #### NOT SURE WHAT IT IS ####
 qDinero = {dias[0]: int(0)}
 
 ## D_t ## Cantidad dinero donado en dia t
-qDonaciones = {dias[0]: int(0)}  # int del dinero
+# qDonaciones = {dias[0]: int(0)}  # int del dinero
 
 ## L_0 ## Cantidad dinero inicial
-qInicialDinero = int(0)
+# qInicialDinero = int(0)
 
 ## W_i ## Costo comprar alimento i
 # costoAlimento = {alimentos[0]: "costo"}  # valor
@@ -117,12 +117,7 @@ distanciaCaja = {cajas[0]: int(2), cajas[1]: int(5), cajas[2]: "ETC"}
 cDistancia = int(5)
 
 ## C_it = vencimientoAlimento enviable   es un parametro binario que indica si un alimento puede ser incorporado a las cajas no. 
-# vencimientoAlimento = {
-#     dias[0]: {alimentos[0]: 1, alimentos[1]: 1}, 
-#     dias[1]: {alimentos[0]: 1, alimentos[1]: 0},
-#     dias[2]: {alimentos[0]: 1, alimentos[1]: 0}, 
-#     dias[3]: {alimentos[0]: 0, alimentos[1]: 0},
-#     }
+# print(vencimientoAlimento)
 
 
 
