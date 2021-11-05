@@ -96,18 +96,18 @@ model.addConstrs(
     (qAlmacenado[alimento, 0] == qInicialAlimento[alimento] for alimento in alimentos)
 )
 
-# ## R3 ## Almacenamiento Maximo (tamaño bodega)
-# model.addConstrs(
-# (
-# volBodega
-# >= quicksum(
-# qAlmacenado[alimento, dia] * volAlimento[alimento] for alimento in alimentos
-# )
-# + quicksum(bCaja[caja, dia] * volCaja for caja in cajas)
-# for dia in dias
-# ),
-# name="Almacenamiento maximo",
-# )
+## R3 ## Almacenamiento Maximo (tamaño bodega)
+model.addConstrs(
+(
+volBodega
+>= quicksum(
+qAlmacenado[alimento, dia] * volAlimento[alimento] for alimento in alimentos
+)
++ quicksum(bCaja[caja, dia] * volCaja for caja in cajas)
+for dia in dias
+),
+name="Almacenamiento maximo",
+)
 
 # R4 ## Capacidad de producción
 ## Kt >= sum de j (Y j,t)
@@ -174,19 +174,19 @@ model.addConstrs(
     name="Cantidad de alimentos en una caja 2",
 )
 
-# ## R9 ## Vencimiento de los alimentos
-# ##Enit   Ii, j
-# model.addConstrs(
-#     (
-#         vencimientoAlimento[dia][alimento] >= bAlimentoCaja[alimento, caja]
-#         for alimento in alimentos
-#         for caja in cajas
-#         for dia in dias[1:]
-#     ),
-#     name="Vencimiento alimentos",
-# )
+## R9 ## Vencimiento de los alimentos
+##Enit   Ii, j
+model.addConstrs(
+    (
+        vencimientoAlimento[dia][alimento] >= bAlimentoCaja[alimento, caja]
+        for alimento in alimentos
+        for caja in cajas
+        for dia in dias[1:]
+    ),
+    name="Vencimiento alimentos",
+)
 
-# ## R10 ## Priorizar los alimentos por vencer
+## R10 ## Priorizar los alimentos por vencer
 # model.addConstrs(
 #     (
 #         vencimientoAlimento[dia][alimento] - vencimientoAlimento[dia + 1][alimento]
@@ -307,7 +307,6 @@ model.optimize()
 model.printAttr("X")
 print("\n -------------------- \n")
 
-
-#### HOLGURAS ####
+# #### HOLGURAS ####
 # for constr in model.getConstrs():
 #     print(constr, constr.getAttr("slack"))
