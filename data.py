@@ -29,7 +29,7 @@
 dias = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 ## considerar parametro K_t para el numero de cajas posibles en un dia
-cajas = [i for i in range(1, 16)]
+cajas = [i for i in range(1, 400)]
 
 ## caso de nutrientes que no esten en un alimentos sera 0
 nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
@@ -37,6 +37,9 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 ####################
 #### PARAMETROS ####
 ####################
+
+## T ## Tarifa inicial segun numero de repartidores
+tarifa = int(150000)
 
 ## U_ik ## Valor nutricional del alimento i con respecto al nutriente k
 # print(qNutrientesAlimentos)
@@ -107,8 +110,6 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 #      dias[1]: {cajas[0]: 0, cajas[1]: 0, cajas[2]: 1, cajas[3]: 0, cajas[4]: "ETC"},
 #  }
 
-## T ## Tarifa inicial segun numero de repartidores
-tarifa = int(150000)
 
 # ## Km_j ## Distancia (km) que recorre caja j antes de llegar a su destino
 # distanciaCaja = {cajas[0]: int(2), cajas[1]: int(5), cajas[2]: "ETC"}

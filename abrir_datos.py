@@ -13,7 +13,7 @@ qRescatado = {}
 for i in range(0, 15):
     qRescatado[i] = {}
 
-with open("csvs/Datos - Alimentos.csv") as csv_file:
+with open("csvs/Datos.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     line_count = 0
     for row in csv_reader:
@@ -90,15 +90,15 @@ with open("csvs/Datos - cantidad-productos.csv") as productos:
     line = 0
     for r in reader_productos:
         if line != 0:
-            min_prod, max_prod, max_cajas, vol_bodega, personas, vol_caja = r
+            min_prod, max_prod, max_cajas, max_prod_caja ,vol_bodega, personas, vol_caja = r
             minProductos = float(min_prod)
             maxProductos = float(max_prod)
+            maxProductosCaja = float(max_prod_caja)
             maxCajas = float(max_cajas)
             volBodega = float(vol_bodega)
             qPersonas = float(personas)
             volCaja = float(vol_caja)
         line += 1
-
 minNutriente = {}
 with open("csvs/Datos - nutricion.csv") as nutri:
     nutr = csv.reader(nutri, delimiter=",")

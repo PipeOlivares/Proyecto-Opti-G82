@@ -15,6 +15,7 @@ from abrir_datos import (
     qRescatado,
     minProductos,
     maxProductos,
+    maxProductosCaja,
     maxCajas,
     volBodega,
     qPersonas,
@@ -146,7 +147,7 @@ model.addConstrs(
             * qNutrientesAlimentos[alimento][nutriente]
             for alimento in alimentos
         )
-        >= minNutriente[nutriente] * qPersonas
+        >= minNutriente[nutriente]
         for nutriente in nutrientes
         for caja in cajas
         for dia in dias
@@ -174,6 +175,17 @@ model.addConstrs(
     name="Cantidad de alimentos en una caja 2",
 )
 
+## R16 ## Vencimiento de los alimentos
+model.addConstrs(
+    (
+        quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
+        <= maxProductosCaja
+        for caja in cajas
+        for dia in dias
+    ),
+    name="Maxima cantidad de unidades por caja",
+)
+
 ## R9 ## Vencimiento de los alimentos
 ##Enit   Ii, j
 model.addConstrs(
@@ -190,7 +202,7 @@ model.addConstrs(
 # model.addConstrs(
 #     (
 #         vencimientoAlimento[dia][alimento] - vencimientoAlimento[dia + 1][alimento]
-#         <= bAlimentoCaja[alimento, caja]
+#         <= qAlimentoCaja[alimento, caja, dia] + qAlimentoCaja[alimento, caja, dia+1]
 #         for alimento in alimentos
 #         for caja in cajas
 #         for dia in dias[1:-1]
@@ -225,7 +237,6 @@ model.addConstrs(
     ),
     name="se genera caja cuando se le dan alimentos -- 1",
 )
-
 model.addConstrs(
     (
         quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
@@ -236,24 +247,35 @@ model.addConstrs(
     name="se genera caja cuando se le dan alimentos -- 2",
 )
 
-## R13 ## Relacion de variable I_ij con X_ijt
+# ## R13 ## Relacion de variable I_ij con X_ijt
+# model.addConstrs(
+#     (
+#         bAlimentoCaja[alimento, caja] * 1000000000 >= qAlimentoCaja[alimento, caja, dia]
+#         for alimento in alimentos
+#         for caja in cajas
+#         for dia in dias
+#     ),
+#     name="Relacion con multiplicador de I_ij con X_ijt",
+# )
+# model.addConstrs(
+#     (
+#         qAlimentoCaja[alimento, caja, dia] >= bAlimentoCaja[alimento, caja]
+#         for alimento in alimentos
+#         for caja in cajas
+#         for dia in dias
+#     ),
+#     name="Relacion sin multiplicador de I_ij con X_ijt",
+# )
+
+## R18 ## Cajas armadas en un mismo dia seran iguales
 model.addConstrs(
     (
-        bAlimentoCaja[alimento, caja] * 1000000000 >= qAlimentoCaja[alimento, caja, dia]
+        qAlimentoCaja[alimento, caja, dia] == qAlimentoCaja[alimento, caja + 1, dia]
         for alimento in alimentos
-        for caja in cajas
+        for caja in cajas[:-1]
         for dia in dias
     ),
-    name="Relacion con multiplicador de I_ij con X_ijt",
-)
-model.addConstrs(
-    (
-        qAlimentoCaja[alimento, caja, dia] >= bAlimentoCaja[alimento, caja]
-        for alimento in alimentos
-        for caja in cajas
-        for dia in dias
-    ),
-    name="Relacion sin multiplicador de I_ij con X_ijt",
+    name="Cajas iguales en el mismo dia",
 )
 
 # N1 ## Naturaleza X_ijt
@@ -283,7 +305,7 @@ model.addConstrs(
 ## N5 ## Naturaleza F_it
 model.addConstrs(
     (qAlimentoComprar[alimento, dia] >= 0 for alimento in alimentos for dia in dias),
-    name="Naturaleza X_ijt",
+    name="Naturaleza F_it",
 )
 
 ## N6 ## Naturaleza Z_t
@@ -304,9 +326,9 @@ model.optimize()
 
 
 #### RESULTADO ####
-# model.printAttr("X")
+model.printAttr("X")
 # print("\n -------------------- \n")
 
-# #### HOLGURAS ####
+# # # #### HOLGURAS ####
 # for constr in model.getConstrs():
 #     print(constr, constr.getAttr("slack"))
