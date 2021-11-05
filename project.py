@@ -248,24 +248,24 @@ model.addConstrs(
 )
 
 # ## R13 ## Relacion de variable I_ij con X_ijt
-# model.addConstrs(
-#     (
-#         bAlimentoCaja[alimento, caja] * 1000000000 >= qAlimentoCaja[alimento, caja, dia]
-#         for alimento in alimentos
-#         for caja in cajas
-#         for dia in dias
-#     ),
-#     name="Relacion con multiplicador de I_ij con X_ijt",
-# )
-# model.addConstrs(
-#     (
-#         qAlimentoCaja[alimento, caja, dia] >= bAlimentoCaja[alimento, caja]
-#         for alimento in alimentos
-#         for caja in cajas
-#         for dia in dias
-#     ),
-#     name="Relacion sin multiplicador de I_ij con X_ijt",
-# )
+model.addConstrs(
+    (
+        bAlimentoCaja[alimento, caja] * 1000000000 >= qAlimentoCaja[alimento, caja, dia]
+        for alimento in alimentos
+        for caja in cajas
+        for dia in dias
+    ),
+    name="Relacion con multiplicador de I_ij con X_ijt",
+)
+model.addConstrs(
+    (
+        qAlimentoCaja[alimento, caja, dia] >= bAlimentoCaja[alimento, caja]
+        for alimento in alimentos
+        for caja in cajas
+        for dia in dias
+    ),
+    name="Relacion sin multiplicador de I_ij con X_ijt",
+)
 
 ## R18 ## Cajas armadas en un mismo dia seran iguales
 model.addConstrs(
@@ -326,7 +326,7 @@ model.optimize()
 
 
 #### RESULTADO ####
-model.printAttr("X")
+# model.printAttr("X")
 # print("\n -------------------- \n")
 
 # # # #### HOLGURAS ####
