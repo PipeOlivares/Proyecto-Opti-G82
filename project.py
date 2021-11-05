@@ -12,32 +12,43 @@ from abrir_datos import (
     costoAlimento,
     vencimientoPeriodo,
     qNutrientesAlimentos,
+    qRescatado,
+    minProductos,
+    maxProductos,
+    maxCajas,
+    volBodega,
+    qPersonas,
+    volCaja,
+    minNutriente,
+    vencimientoAlimento,
+    qDonaciones,
+    qInicialDinero,
 )
 
 from data import (
-    alimentos,
+    # alimentos,
     dias,
     cajas,
     nutrientes,
-    qNutrientesAlimentos,
-    volCaja,
-    minNutriente,
-    qPersonas,
-    minProductos,
-    maxProductos,
-    vencimientoAlimento,
-    volAlimento,
-    qRescatado,
-    qInicialAlimento,
-    qDonaciones,
-    qInicialDinero,
-    costoAlimento,
-    volBodega,
-    maxCajas,
-    crearCajaDia,
+    # qNutrientesAlimentos,
+    # volCaja,
+    # minNutriente,
+    # qPersonas,
+    # minProductos,
+    # maxProductos,
+    # vencimientoAlimento,
+    # volAlimento,
+    # qRescatado,
+    # qInicialAlimento,
+    # qDonaciones,
+    # qInicialDinero,
+    # costoAlimento,
+    # volBodega,
+    # maxCajas,
+    # crearCajaDia,
     tarifa,
-    distanciaCaja,
-    cDistancia,
+    # distanciaCaja,
+    # cDistancia,
 )
 
 
@@ -50,30 +61,30 @@ qAlimentoCaja = model.addVars(alimentos, cajas, dias, vtype=GRB.INTEGER, name="X
 bAlimentoCaja = model.addVars(alimentos, cajas, vtype=GRB.BINARY, name="I_ij")
 bCaja = model.addVars(cajas, dias, vtype=GRB.BINARY, name="Y_jt")
 qAlmacenado = model.addVars(alimentos, dias, vtype=GRB.INTEGER, name="B_it")
-qAlimentoComprar = model.addVars(cajas, dias, vtype=GRB.INTEGER, name="F_it")
+qAlimentoComprar = model.addVars(alimentos, dias, vtype=GRB.INTEGER, name="F_it")
+qPresupuesto = model.addVars(dias, vtype=GRB.INTEGER, name="Z_t")
 
-#tiene un error, le fata una variable? porque dice que no pueden ser listas
-qPresupuesto = model.addVar(dias, vtype=GRB.INTEGER, name="Z_t")
- 
 model.update()
-
-
-#### FUNCION OBJETIVO ####
-objective = quicksum(quicksum(bCaja for caja in cajas) for dia in dias)
 
 
 #######################
 #### RESTRICCIONES ####
 #######################
 
-## R1 ## Inventario (flujo)
+## R1 ## Inventario inicial
+model.addConstrs(
+    (qAlmacenado[alimento, 0] == qInicialAlimento[alimento] for alimento in alimentos),
+    name="Inventario inicial",
+)
+
+## R2 ## Inventario (flujo)
 model.addConstrs(
     (
-        qAlmacenado[alimento][dia]
-        == qAlmacenado[alimento][dia - 1]
-        + qRescatado[alimento][dia]
-        + qAlimentoComprar[alimento][dia]
-        - quicksum(qAlimentoCaja for caja in cajas)
+        qAlmacenado[alimento, dia]
+        == qAlmacenado[alimento, dia - 1]
+        + qAlimentoComprar[alimento, dia]
+        + qRescatado[dia][alimento]
+        - quicksum(qAlimentoCaja[alimento, caja, dia] for caja in cajas)
         for alimento in alimentos
         for dia in dias[1:]
     ),
@@ -82,26 +93,26 @@ model.addConstrs(
 
 ## R2 ## Inventario inicial
 model.addConstrs(
-    (qAlmacenado[alimento][0] == qInicialAlimento[alimento] for alimento in alimentos)
+    (qAlmacenado[alimento, 0] == qInicialAlimento[alimento] for alimento in alimentos)
 )
 
-## R3 ## Almacenamiento Maximo (tamaño bodega)
-model.addConstrs(
-    (
-        volBodega
-        >= quicksum(
-            qAlmacenado[alimento][dia] * volAlimento[alimento] for alimento in alimentos
-        )
-        + quicksum(bCaja[caja][dia] * volCaja for caja in cajas)
-        for dia in dias
-    ),
-    name="Almacenamiento maximo",
-)
+# ## R3 ## Almacenamiento Maximo (tamaño bodega)
+# model.addConstrs(
+# (
+# volBodega
+# >= quicksum(
+# qAlmacenado[alimento, dia] * volAlimento[alimento] for alimento in alimentos
+# )
+# + quicksum(bCaja[caja, dia] * volCaja for caja in cajas)
+# for dia in dias
+# ),
+# name="Almacenamiento maximo",
+# )
 
-## R4 ## Capacidad de producción
+# R4 ## Capacidad de producción
 ## Kt >= sum de j (Y j,t)
 model.addConstrs(
-    (maxCajas >= quicksum(crearCajaDia[dia][caja] for caja in cajas) for dia in dias),
+    (maxCajas >= quicksum(bCaja[caja, dia] for caja in cajas) for dia in dias),
     name="Capacidad de producción",
 )
 
@@ -111,9 +122,9 @@ model.addConstrs(
         qPresupuesto[dia]
         == qPresupuesto[dia - 1]
         + qDonaciones[dia]
-        - tarifa * ParametroNoDefinido  #### definir parametro 1 cuando es multiplo de 7, 0 cuando no.
+        - tarifa
         - quicksum(
-            qAlimentoComprar[alimento][dia] * costoAlimento[alimento]
+            qAlimentoComprar[alimento, dia] * costoAlimento[alimento]
             for alimento in alimentos
         )
         for dia in dias[1:]
@@ -122,38 +133,32 @@ model.addConstrs(
 )
 
 ## R6 ## Dinero inicial en t = 0
-model.addConstrs((qPresupuesto[0] == qInicialDinero), name="Presupuesto inicial")
-
+model.addConstrs(
+    (qPresupuesto[dia] == qInicialDinero for dia in dias if dia == 0),
+    name="Presupuesto inicial",
+)
 ## R7 ## Valor nutricional de los alimentos
 #  Revisar
 model.addConstrs(
     (
-        (
-            (
-                (
-                    (
-                        quicksum(qAlimentoCaja[alimento][caja][dia])
-                        * qNutrientesAlimentos[alimento][nutriente]
-                    )
-                    >= minNutriente[nutriente] * qPersonas
-                    for alimento in alimentos
-                )
-                for nutriente in nutrientes
-            )
-            for caja in cajas
+        quicksum(
+            qAlimentoCaja[alimento, caja, dia]
+            * qNutrientesAlimentos[alimento][nutriente]
+            for alimento in alimentos
         )
+        >= minNutriente[nutriente] * qPersonas
+        for nutriente in nutrientes
+        for caja in cajas
         for dia in dias
     ),
     name="Valor nutricional de los alimentos",
 )
-
-
 ## R8 ## Cantidad de alimentos en una caja (variabilidad) , no unitario
 model.addConstrs(
     (
         (
-            (quicksum(bAlimentoCaja[alimento][caja]) >= minProductos)
-            for alimento in alimentos
+            quicksum(bAlimentoCaja[alimento, caja] for alimento in alimentos)
+            >= minProductos
         )
         for caja in cajas
     ),
@@ -162,53 +167,59 @@ model.addConstrs(
 
 model.addConstrs(
     (
-        (
-            (quicksum(bAlimentoCaja[alimento][caja]) <= maxProductos)
-            for alimento in alimentos
-        )
+        quicksum(bAlimentoCaja[alimento, caja] for alimento in alimentos)
+        <= maxProductos
         for caja in cajas
     ),
     name="Cantidad de alimentos en una caja 2",
 )
 
-## R9 ## Vencimiento de los alimentos
-##Enit   Ii, j      
-model.addConstrs(
-    (
-        vencimientoAlimento[dia][alimento] >= bAlimentoCaja[alimento][caja]
-        for alimento in alimentos
-        for caja in cajas
-        for dia in dias
-    ),
-    name="Vencimiento alimentos",
-)
+# ## R9 ## Vencimiento de los alimentos
+# ##Enit   Ii, j
+# model.addConstrs(
+#     (
+#         vencimientoAlimento[dia][alimento] >= bAlimentoCaja[alimento, caja]
+#         for alimento in alimentos
+#         for caja in cajas
+#         for dia in dias[1:]
+#     ),
+#     name="Vencimiento alimentos",
+# )
+
+# ## R10 ## Priorizar los alimentos por vencer
+# model.addConstrs(
+#     (
+#         vencimientoAlimento[dia][alimento] - vencimientoAlimento[dia + 1][alimento]
+#         <= bAlimentoCaja[alimento, caja]
+#         for alimento in alimentos
+#         for caja in cajas
+#         for dia in dias[1:-1]
+#     ),
+#     name="Priorizar alimentos por vencer",
+# )
 
 
-## R10 ##  Capacidad de la caja
+## R11 ##  Capacidad de la caja
 ## Revisar
 model.addConstrs(
     (
-        (
-            (
-                volCaja
-                >= quicksum(
-                    qAlimentoCaja[alimento][caja][dia] * volAlimento[alimento]
-                    for alimento in alimentos
-                )
-            )
-            for caja in cajas
+        volCaja
+        >= quicksum(
+            qAlimentoCaja[alimento, caja, dia] * volAlimento[alimento]
+            for alimento in alimentos
         )
+        for caja in cajas
         for dia in dias
     ),
     name=" Capacidad de la caja ",
 )
 
-## R11 ## Una caja se genera cuando se le entregan alimentos
+## R12 ## Una caja se genera cuando se le entregan alimentos
 ##
 model.addConstrs(
     (
-        quicksum(qAlimentoCaja[alimento][caja][dia] for alimento in alimentos)
-        <= bCaja[caja][dia] * float("inf")  ## BigM lo deje como máximo
+        quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
+        <= bCaja[caja, dia] * 1000000000  ## BigM lo deje como máximo
         for caja in cajas
         for dia in dias
     ),
@@ -217,19 +228,18 @@ model.addConstrs(
 
 model.addConstrs(
     (
-        quicksum(qAlimentoCaja[alimento][caja][dia] for alimento in alimentos)
-        >= bCaja[caja][dia]
+        quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
+        >= bCaja[caja, dia]
         for caja in cajas
         for dia in dias
     ),
     name="se genera caja cuando se le dan alimentos -- 2",
 )
 
-## R12 ## Relacion de variable I_ij con X_ijt
+## R13 ## Relacion de variable I_ij con X_ijt
 model.addConstrs(
     (
-        bAlimentoCaja[alimento][caja] * float("inf")
-        >= qAlimentoCaja[alimento][caja][dia]
+        bAlimentoCaja[alimento, caja] * 1000000000 >= qAlimentoCaja[alimento, caja, dia]
         for alimento in alimentos
         for caja in cajas
         for dia in dias
@@ -238,7 +248,7 @@ model.addConstrs(
 )
 model.addConstrs(
     (
-        qAlimentoCaja[alimento][caja][dia] >= bAlimentoCaja[alimento][caja]
+        qAlimentoCaja[alimento, caja, dia] >= bAlimentoCaja[alimento, caja]
         for alimento in alimentos
         for caja in cajas
         for dia in dias
@@ -249,7 +259,7 @@ model.addConstrs(
 # N1 ## Naturaleza X_ijt
 model.addConstrs(
     (
-        qAlimentoCaja[alimento][caja][dia] >= 0
+        qAlimentoCaja[alimento, caja, dia] >= 0
         for alimento in alimentos
         for caja in cajas
         for dia in dias
@@ -261,18 +271,18 @@ model.addConstrs(
 ## COMO ES BINARIA, NO NECESITA RESTRICCION DE NATURALEZA
 
 ## N3 ## Naturaleza Y_jt
-## COMO ES BINARIA< NO NECESITA NATURALEZA
+## COMO ES BINARIA, NO NECESITA NATURALEZA
 
 
 ## N4 ## Naturaleza B_it
 model.addConstrs(
-    (qAlmacenado[alimento][dia] >= 0 for alimento in alimentos for dia in dias),
+    (qAlmacenado[alimento, dia] >= 0 for alimento in alimentos for dia in dias),
     name="Naturaleza B_it",
 )
 
 ## N5 ## Naturaleza F_it
 model.addConstrs(
-    (qAlimentoComprar[alimento][dia] >= 0 for alimento in alimentos for dia in dias),
+    (qAlimentoComprar[alimento, dia] >= 0 for alimento in alimentos for dia in dias),
     name="Naturaleza X_ijt",
 )
 
@@ -283,11 +293,21 @@ model.addConstrs(
 )
 
 
+##########################
+#### FUNCION OBJETIVO ####
+##########################
+
+objective = quicksum(bCaja[caja, dia] for caja in cajas for dia in dias)
+model.setObjective(objective, GRB.MAXIMIZE)
+
+model.optimize()
+
+
 #### RESULTADO ####
-model.printAttr("SOLUCION")
+model.printAttr("X")
 print("\n -------------------- \n")
 
 
 #### HOLGURAS ####
-for constr in model.getConstrs():
-    print(constr, constr.getAttr("slack"))
+# for constr in model.getConstrs():
+#     print(constr, constr.getAttr("slack"))

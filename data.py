@@ -29,7 +29,7 @@
 dias = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 ## considerar parametro K_t para el numero de cajas posibles en un dia
-cajas = [1, 2, 3, 4, 5, "etc"]
+cajas = [i for i in range(1, 16)]
 
 ## caso de nutrientes que no esten en un alimentos sera 0
 nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
@@ -63,11 +63,11 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 
 ## C_i ## Maximo de dias que alimento i puede ser enviado en caja
 ## Dias hasta que la caja va a ser enviada??
-vencimiento = int(10)  #### NOT SURE WHAT IT IS ####
+# vencimiento = int(10)  #### NOT SURE WHAT IT IS ####
 
 
 ## A_i ## Volumen de alimento i#
-#volAlimento = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
+# volAlimento = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
 
 ## R_it ## Cantidad de alimento i rescatado en dia t
 # qRescatado = {
@@ -80,7 +80,7 @@ vencimiento = int(10)  #### NOT SURE WHAT IT IS ####
 # qInicialAlimento = {alimentos[0]: int(10)}
 
 ## G_t ## Cantidad de dinero guardado en dia t
-qDinero = {dias[0]: int(0)}
+# qDinero = {dias[0]: int(0)}
 
 ## D_t ## Cantidad dinero donado en dia t
 # qDonaciones = {dias[0]: int(0)}  # int del dinero
@@ -102,23 +102,19 @@ qDinero = {dias[0]: int(0)}
 
 ## ?? ## NOSE SI ES EXACTAMENTE UN PARAMETRO, pero es el orden de importacion
 ## esto esta hard de hacer porque estariamos dando el numero de cajas hechas en un dia con esos parametros
-crearCajaDia = {
-    dias[0]: {cajas[0]: 1, cajas[1]: 1, cajas[2]: 0, cajas[3]: 0, cajas[4]: "ETC"},
-    dias[1]: {cajas[0]: 0, cajas[1]: 0, cajas[2]: 1, cajas[3]: 0, cajas[4]: "ETC"},
-}
+# crearCajaDia = {
+#      dias[0]: {cajas[0]: 1, cajas[1]: 1, cajas[2]: 0, cajas[3]: 0, cajas[4]: "ETC"},
+#      dias[1]: {cajas[0]: 0, cajas[1]: 0, cajas[2]: 1, cajas[3]: 0, cajas[4]: "ETC"},
+#  }
 
 ## T ## Tarifa inicial segun numero de repartidores
-tarifa = int(12)
+tarifa = int(150000)
 
-## Km_j ## Distancia (km) que recorre caja j antes de llegar a su destino
-distanciaCaja = {cajas[0]: int(2), cajas[1]: int(5), cajas[2]: "ETC"}
+# ## Km_j ## Distancia (km) que recorre caja j antes de llegar a su destino
+# distanciaCaja = {cajas[0]: int(2), cajas[1]: int(5), cajas[2]: "ETC"}
 
-## Q ## Costo por kilometro recorrido
-cDistancia = int(5)
+# ## Q ## Costo por kilometro recorrido
+# cDistancia = int(5)
 
-## C_it = vencimientoAlimento enviable   es un parametro binario que indica si un alimento puede ser incorporado a las cajas no. 
+## C_it = vencimientoAlimento enviable   es un parametro binario que indica si un alimento puede ser incorporado a las cajas no.
 # print(vencimientoAlimento)
-
-
-
-
