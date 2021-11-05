@@ -304,8 +304,8 @@ model.optimize()
 
 
 #### RESULTADO ####
-model.printAttr("X")
-print("\n -------------------- \n")
+# model.printAttr("X")
+# print("\n -------------------- \n")
 
 # #### HOLGURAS ####
 # for constr in model.getConstrs():
