@@ -25,14 +25,13 @@ from data import (
     qPersonas,
     minProductos,
     maxProductos,
-    vencimiento,
+    vencimientoAlimento,
     volAlimento,
     qRescatado,
     qInicialAlimento,
     qDonaciones,
     qInicialDinero,
     costoAlimento,
-    vencimientoPeriodo,
     volBodega,
     maxCajas,
     crearCajaDia,
@@ -52,8 +51,10 @@ bAlimentoCaja = model.addVars(alimentos, cajas, vtype=GRB.BINARY, name="I_ij")
 bCaja = model.addVars(cajas, dias, vtype=GRB.BINARY, name="Y_jt")
 qAlmacenado = model.addVars(alimentos, dias, vtype=GRB.INTEGER, name="B_it")
 qAlimentoComprar = model.addVars(cajas, dias, vtype=GRB.INTEGER, name="F_it")
-qPresupuesto = model.addVar(dias, vtype=GRB.INTEGER, name="Z_t")
 
+#tiene un error, le fata una variable? porque dice que no pueden ser listas
+qPresupuesto = model.addVar(dias, vtype=GRB.INTEGER, name="Z_t")
+ 
 model.update()
 
 
@@ -110,10 +111,7 @@ model.addConstrs(
         qPresupuesto[dia]
         == qPresupuesto[dia - 1]
         + qDonaciones[dia]
-        - tarifa
-        - quicksum(
-            distanciaCaja[caja] * bCaja[caja][dia] * cDistancia for caja in cajas
-        )
+        - tarifa * ParametroNoDefinido  #### definir parametro 1 cuando es multiplo de 7, 0 cuando no.
         - quicksum(
             qAlimentoComprar[alimento][dia] * costoAlimento[alimento]
             for alimento in alimentos
@@ -174,9 +172,10 @@ model.addConstrs(
 )
 
 ## R9 ## Vencimiento de los alimentos
+##Enit   Ii, j      
 model.addConstrs(
     (
-        vencimientoPeriodo[alimento][dia] >= vencimiento * bAlimentoCaja[alimento][caja]
+        vencimientoAlimento[dia][alimento] >= bAlimentoCaja[alimento][caja]
         for alimento in alimentos
         for caja in cajas
         for dia in dias
@@ -259,47 +258,11 @@ model.addConstrs(
 )
 
 ## N2 ## Naturaleza I_ij
-model.addConstrs(
-    (
-        bAlimentoCaja[alimento][caja] == 0
-        for alimento in alimentos
-        for caja in cajas
-        if alimento
-        not in caja  ### NO SE SI SE HACE ASI, DE HECHO NO ME HACE TANTO SENTIDO
-    ),
-    name="Naturaleza I_ij == 0",
-)
-model.addConstrs(
-    (
-        bAlimentoCaja[alimento][caja] == 1
-        for alimento in alimentos
-        for caja in cajas
-        if alimento in caja  ### NO SE SI SE HACE ASI, DE HECHO NO ME HACE TANTO SENTIDO
-    ),
-    name="Naturaleza I_ij == 1",
-)
+## COMO ES BINARIA, NO NECESITA RESTRICCION DE NATURALEZA
 
 ## N3 ## Naturaleza Y_jt
-model.addConstrs(
-    (
-        bCaja[caja][dia] == 0
-        for caja in cajas
-        for dia in dias
-        if (caja, dia)
-        not in crearCajaDia  ### NO SE SI SE HACE ASI, DE HECHO NO ME HACE TANTO SENTIDO
-    ),
-    name="Naturaleza Y_jt == 0",
-)
-model.addConstrs(
-    (
-        bCaja[caja][dia] == 1
-        for caja in cajas
-        for dia in dias
-        if (caja, dia)
-        in crearCajaDia  ### NO SE SI SE HACE ASI, DE HECHO NO ME HACE TANTO SENTIDO
-    ),
-    name="Naturaleza Y_jt == 1",
-)
+## COMO ES BINARIA< NO NECESITA NATURALEZA
+
 
 ## N4 ## Naturaleza B_it
 model.addConstrs(

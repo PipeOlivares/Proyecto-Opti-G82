@@ -1,21 +1,21 @@
 ##############
 #### DATA ####
 ##############
-from abrir_datos import (
-    alimentos,
-    volAlimento,
-    qInicialAlimento,
-    costoAlimento,
-    vencimientoPeriodo,
-    qNutrientesAlimentos,
-    minProductos,
-    maxProductos,
-    maxCajas    ,
-    volBodega   ,
-    qPersonas   ,
-    volCaja     ,
-    minNutriente
-)
+# from abrir_datos import (
+#     alimentos,
+#     volAlimento,
+#     qInicialAlimento,
+#     costoAlimento,
+#     vencimientoPeriodo,
+#     qNutrientesAlimentos,
+#     minProductos,
+#     maxProductos,
+#     maxCajas    ,
+#     volBodega   ,
+#     qPersonas   ,
+#     volCaja     ,
+#     minNutriente
+# )
 
 # qNutrientesAlimentos, volCaja, minNutriente, qPersonas, minProductos, maxProductos,
 # vencimiento, volAlimento, qRescatado, qInicialAlimento, qDonaciones, qInicialDinero,
@@ -24,7 +24,7 @@ from abrir_datos import (
 
 #### CONJUNTOS ####
 
-print(alimentos)
+# print(alimentos)
 
 dias = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
@@ -65,18 +65,19 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 ## Dias hasta que la caja va a ser enviada??
 vencimiento = int(10)  #### NOT SURE WHAT IT IS ####
 
-## A_i ## Volumen de alimento i
-volAlimento = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
+
+## A_i ## Volumen de alimento i#
+#volAlimento = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
 
 ## R_it ## Cantidad de alimento i rescatado en dia t
-qRescatado = {
-    dias[0]: {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"},
-    dias[1]: {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"},
-    dias[2]: {"ETC"},
-}
+# qRescatado = {
+#     dias[0]: {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"},
+#     dias[1]: {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"},
+#     dias[2]: {"ETC"},
+# }
 
 ## R_i0 ## Inventario inicial alimento i
-qInicialAlimento = {alimentos[0]: int(10)}
+# qInicialAlimento = {alimentos[0]: int(10)}
 
 ## G_t ## Cantidad de dinero guardado en dia t
 qDinero = {dias[0]: int(0)}
@@ -91,7 +92,7 @@ qInicialDinero = int(0)
 # costoAlimento = {alimentos[0]: "costo"}  # valor
 
 ## V_it ## Dias desde el periodo t hasta que venza alimento i
-vencimientoPeriodo = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
+# vencimientoPeriodo = {alimentos[0]: int(10), alimentos[1]: int(39), alimentos[2]: "ETC"}
 
 ## J ## Volumen util de bodega
 # volBodega = int(5)  # valor
@@ -114,3 +115,15 @@ distanciaCaja = {cajas[0]: int(2), cajas[1]: int(5), cajas[2]: "ETC"}
 
 ## Q ## Costo por kilometro recorrido
 cDistancia = int(5)
+
+## C_it = vencimientoAlimento enviable   es un parametro binario que indica si un alimento puede ser incorporado a las cajas no. 
+# vencimientoAlimento = {
+#     dias[0]: {alimentos[0]: 1, alimentos[1]: 1}, 
+#     dias[1]: {alimentos[0]: 1, alimentos[1]: 0},
+#     dias[2]: {alimentos[0]: 1, alimentos[1]: 0}, 
+#     dias[3]: {alimentos[0]: 0, alimentos[1]: 0},
+#     }
+
+
+
+
