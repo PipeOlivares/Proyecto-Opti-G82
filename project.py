@@ -20,6 +20,7 @@ from abrir_datos import (
     volBodega,
     qPersonas,
     volCaja,
+    qTrabajadores,
     minNutriente,
     vencimientoAlimento,
     qDonaciones,
@@ -52,7 +53,6 @@ from data import (
     # cDistancia,
 )
 
-
 #### MODELO ####
 model = Model("Produccion de Cajas")
 
@@ -77,6 +77,8 @@ model.addConstrs(
     (qAlmacenado[alimento, 0] == qInicialAlimento[alimento] for alimento in alimentos),
     name="Inventario inicial",
 )
+
+
 
 ## R2 ## Inventario (flujo)
 model.addConstrs(
@@ -113,7 +115,7 @@ name="Almacenamiento maximo",
 # R4 ## Capacidad de producción
 ## Kt >= sum de j (Y j,t)
 model.addConstrs(
-    (maxCajas >= quicksum(bCaja[caja, dia] for caja in cajas) for dia in dias),
+    (maxCajas * qTrabajadores[dia] >= quicksum(bCaja[caja, dia] for caja in cajas) for dia in dias[1:]),
     name="Capacidad de producción",
 )
 
@@ -147,7 +149,7 @@ model.addConstrs(
             * qNutrientesAlimentos[alimento][nutriente]
             for alimento in alimentos
         )
-        >= minNutriente[nutriente]
+        >= minNutriente[nutriente] * qPersonas
         for nutriente in nutrientes
         for caja in cajas
         for dia in dias

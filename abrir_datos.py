@@ -221,3 +221,49 @@ with open("csvs/Datos - Dinero.csv") as dinero:
         line_dinero += 1
 
 # print(qDonaciones)
+
+qTrabajadores = {}
+with open("csvs/Datos - Trabajadores.csv") as trabajador:
+    wor = csv.reader(trabajador, delimiter=",")
+    wokr = 0
+    for row_w in wor:
+        if wokr != 0:
+            (
+                _,
+                d1,
+                d2,
+                d3,
+                d4,
+                d5,
+                d6,
+                d7,
+                d8,
+                d9,
+                d10,
+                d11,
+                d12,
+                d13,
+                d14,
+            ) = row_w
+            lista_trabajdores = [
+                0,
+                d1,
+                d2,
+                d3,
+                d4,
+                d5,
+                d6,
+                d7,
+                d8,
+                d9,
+                d10,
+                d11,
+                d12,
+                d13,
+                d14,
+            ]
+            for dia in dias:
+                qTrabajadores[dia] = float(lista_trabajdores[dia])
+        wokr += 1
+
+print(qTrabajadores)
