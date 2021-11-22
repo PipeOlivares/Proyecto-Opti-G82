@@ -269,16 +269,7 @@ model.addConstrs(
     name="Relacion sin multiplicador de I_ij con X_ijt",
 )
 
-## R18 ## Cajas armadas en un mismo dia seran iguales
-model.addConstrs(
-    (
-        qAlimentoCaja[alimento, caja, dia] == qAlimentoCaja[alimento, caja + 1, dia]
-        for alimento in alimentos
-        for caja in cajas[:-1]
-        for dia in dias
-    ),
-    name="Cajas iguales en el mismo dia",
-)
+
 
 # N1 ## Naturaleza X_ijt
 model.addConstrs(
