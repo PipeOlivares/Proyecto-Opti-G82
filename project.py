@@ -2,7 +2,7 @@
 #### PROYECTO G82 ####
 ######################
 from gurobipy import GRB, Model, quicksum
-
+import resultados
 
 #### PARAMETROS ####
 from abrir_datos import (
@@ -55,7 +55,7 @@ from data import (
 
 #### MODELO ####
 model = Model("Produccion de Cajas")
-
+# help(GRB.Attr)
 
 #### VARIABLES ####
 qAlimentoCaja = model.addVars(alimentos, cajas, dias, vtype=GRB.INTEGER, name="X_ijt")
@@ -79,7 +79,6 @@ model.addConstrs(
 )
 
 
-
 ## R2 ## Inventario (flujo)
 model.addConstrs(
     (
@@ -101,21 +100,24 @@ model.addConstrs(
 
 ## R3 ## Almacenamiento Maximo (tamaño bodega)
 model.addConstrs(
-(
-volBodega
->= quicksum(
-qAlmacenado[alimento, dia] * volAlimento[alimento] for alimento in alimentos
-)
-+ quicksum(bCaja[caja, dia] * volCaja for caja in cajas)
-for dia in dias
-),
-name="Almacenamiento maximo",
+    (
+        volBodega
+        >= quicksum(
+            qAlmacenado[alimento, dia] * volAlimento[alimento] for alimento in alimentos
+        )
+        + quicksum(bCaja[caja, dia] * volCaja for caja in cajas)
+        for dia in dias
+    ),
+    name="Almacenamiento maximo",
 )
 
 # R4 ## Capacidad de producción
 ## Kt >= sum de j (Y j,t)
 model.addConstrs(
-    (maxCajas * qTrabajadores[dia] >= quicksum(bCaja[caja, dia] for caja in cajas) for dia in dias[1:]),
+    (
+        maxCajas * qTrabajadores[dia] >= quicksum(bCaja[caja, dia] for caja in cajas)
+        for dia in dias[1:]
+    ),
     name="Capacidad de producción",
 )
 
@@ -270,7 +272,6 @@ model.addConstrs(
 )
 
 
-
 # N1 ## Naturaleza X_ijt
 model.addConstrs(
     (
@@ -325,3 +326,26 @@ model.optimize()
 # # # #### HOLGURAS ####
 # for constr in model.getConstrs():
 #     print(constr, constr.getAttr("slack"))
+
+## Enlistar y Guardar Variables en results.txt ##
+# Metodo obtenido de:
+#   https://www.gurobi.com/documentation/9.1/quickstart_mac/inspecting_the_solution.html
+
+
+var = model.getVars()
+file = open("results.txt", "w")
+
+print("\n -------------------- \n")
+print("La lista de variables tiene largo: " + str(len(var)))
+print("\n -------------------- \n")
+print("Ahora imprimimos la lista entera: \n")
+
+i = 0  # simple counter
+
+for v in var:
+    stttr = str(v.varName) + "=+=" + str(v.x) + "\n"
+    file.write(stttr)
+    print(v.varName, v.x)
+
+
+# print(mostrar_resultados(csv))

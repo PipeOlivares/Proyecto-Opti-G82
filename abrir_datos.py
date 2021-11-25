@@ -13,6 +13,7 @@ qRescatado = {}
 for i in range(0, 15):
     qRescatado[i] = {}
 
+
 with open("csvs/Datos.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     line_count = 0
@@ -90,7 +91,15 @@ with open("csvs/Datos - cantidad-productos.csv") as productos:
     line = 0
     for r in reader_productos:
         if line != 0:
-            min_prod, max_prod, max_cajas, max_prod_caja ,vol_bodega, personas, vol_caja = r
+            (
+                min_prod,
+                max_prod,
+                max_cajas,
+                max_prod_caja,
+                vol_bodega,
+                personas,
+                vol_caja,
+            ) = r
             minProductos = float(min_prod)
             maxProductos = float(max_prod)
             maxProductosCaja = float(max_prod_caja)
@@ -100,6 +109,8 @@ with open("csvs/Datos - cantidad-productos.csv") as productos:
             volCaja = float(vol_caja)
         line += 1
 minNutriente = {}
+
+
 with open("csvs/Datos - nutricion.csv") as nutri:
     nutr = csv.reader(nutri, delimiter=",")
     line_nutri = 0
@@ -109,12 +120,11 @@ with open("csvs/Datos - nutricion.csv") as nutri:
             minNutriente[nutriente] = float(al)
         line_nutri += 1
 
-# print(minNutriente)
-
 # instanciar diccionario
 vencimientoAlimento = {}
 for i in range(0, 15):
     vencimientoAlimento[i] = {}
+
 
 with open("csvs/Datos - C_it.csv") as vencimientos:
     venc = csv.reader(vencimientos, delimiter=",")
@@ -172,6 +182,7 @@ with open("csvs/Datos - C_it.csv") as vencimientos:
 
 # print(vencimientoAlimento)
 
+
 qDonaciones = {}
 with open("csvs/Datos - Dinero.csv") as dinero:
     din = csv.reader(dinero, delimiter=",")
@@ -222,6 +233,7 @@ with open("csvs/Datos - Dinero.csv") as dinero:
 
 # print(qDonaciones)
 
+
 qTrabajadores = {}
 with open("csvs/Datos - Trabajadores.csv") as trabajador:
     wor = csv.reader(trabajador, delimiter=",")
@@ -266,4 +278,4 @@ with open("csvs/Datos - Trabajadores.csv") as trabajador:
                 qTrabajadores[dia] = float(lista_trabajdores[dia])
         wokr += 1
 
-print(qTrabajadores)
+# print(qTrabajadores)
