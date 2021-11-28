@@ -8,7 +8,7 @@
 dias = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 ## considerar parametro K_t para el numero de cajas posibles en un dia
-cajas = [i for i in range(1, 81)]
+cajas = [i for i in range(1, 76)]
 
 ## caso de nutrientes que no esten n un alimentos sera 0
 nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
