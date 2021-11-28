@@ -6,7 +6,6 @@ Y_jt = []
 B_it = []
 F_it = []
 Z_t = []
-cajas = [i for i in range(1, 76)]
 
 ## ojo que hay periodos vacios
 
@@ -74,7 +73,7 @@ cajas_prod_dia = {}
 #print(X_ijt)
 for i in range(15):
     general = []
-    for caja in range(len(cajas)):
+    for caja in range(56):
         cajass = []
         productos = []
         productos.append(f"caja {caja}")

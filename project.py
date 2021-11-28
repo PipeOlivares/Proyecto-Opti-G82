@@ -11,7 +11,6 @@ from abrir_datos import (
     volAlimento,
     qInicialAlimento,
     costoAlimento,
-    vencimientoPeriodo,
     qNutrientesAlimentos,
     qRescatado,
     minProductos,
