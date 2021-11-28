@@ -333,7 +333,7 @@ model.optimize()
 
 
 var = model.getVars()
-file = open("results.txt", "w")
+file = open("results.csv", "w")
 
 print("\n -------------------- \n")
 print("La lista de variables tiene largo: " + str(len(var)))
