@@ -29,34 +29,15 @@ from abrir_datos import (
 )
 
 from data import (
-    # alimentos,
     dias,
     cajas,
     nutrientes,
-    # qNutrientesAlimentos,
-    # volCaja,
-    # minNutriente,
-    # qPersonas,
-    # minProductos,
-    # maxProductos,
-    # vencimientoAlimento,
-    # volAlimento,
-    # qRescatado,
-    # qInicialAlimento,
-    # qDonaciones,
-    # qInicialDinero,
-    # costoAlimento,
-    # volBodega,
-    # maxCajas,
-    # crearCajaDia,
     tarifa,
-    # distanciaCaja,
-    # cDistancia,
 )
 
 #### MODELO ####
 model = Model("Produccion de Cajas")
-# help(GRB.Attr)
+
 
 #### VARIABLES ####
 qAlimentoCaja = model.addVars(alimentos, cajas, dias, vtype=GRB.INTEGER, name="X_ijt")
@@ -73,14 +54,7 @@ model.update()
 #### RESTRICCIONES ####
 #######################
 
-## R1 ## Inventario inicial
-model.addConstrs(
-    (qAlmacenado[alimento, 0] == qInicialAlimento[alimento] for alimento in alimentos),
-    name="Inventario inicial",
-)
-
-
-## R2 ## Inventario (flujo)
+## R1 ## Inventario (flujo)
 model.addConstrs(
     (
         qAlmacenado[alimento, dia]
@@ -94,9 +68,11 @@ model.addConstrs(
     name="Inventario (flujo)",
 )
 
+
 ## R2 ## Inventario inicial
 model.addConstrs(
-    (qAlmacenado[alimento, 0] == qInicialAlimento[alimento] for alimento in alimentos)
+    (qAlmacenado[alimento, 0] == qInicialAlimento[alimento] for alimento in alimentos),
+    name="Inventario inicial",
 )
 
 ## R3 ## Almacenamiento Maximo (tamaño bodega)
@@ -143,6 +119,7 @@ model.addConstrs(
     (qPresupuesto[dia] == qInicialDinero for dia in dias if dia == 0),
     name="Presupuesto inicial",
 )
+
 ## R7 ## Valor nutricional de los alimentos
 #  Revisar
 model.addConstrs(
@@ -159,6 +136,7 @@ model.addConstrs(
     ),
     name="Valor nutricional de los alimentos",
 )
+
 ## R8 ## Cantidad de alimentos en una caja (variabilidad) , no unitario
 model.addConstrs(
     (
@@ -180,17 +158,6 @@ model.addConstrs(
     name="Cantidad de alimentos en una caja 2",
 )
 
-## R16 ## 
-model.addConstrs(
-    (
-        quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
-        <= maxProductosCaja
-        for caja in cajas
-        for dia in dias
-    ),
-    name="Maxima cantidad de unidades por caja",
-)
-
 ## R9 ## Vencimiento de los alimentos
 ##Enit   Ii, j
 model.addConstrs(
@@ -203,21 +170,7 @@ model.addConstrs(
     name="Vencimiento alimentos",
 )
 
-## R10 ## Priorizar los alimentos por vencer
-# model.addConstrs(
-#     (
-#         vencimientoAlimento[dia][alimento] - vencimientoAlimento[dia + 1][alimento]
-#         <= qAlimentoCaja[alimento, caja, dia] + qAlimentoCaja[alimento, caja, dia+1]
-#         for alimento in alimentos
-#         for caja in cajas
-#         for dia in dias[1:-1]
-#     ),
-#     name="Priorizar alimentos por vencer",
-# )
-
-
-## R11 ##  Capacidad de la caja
-## Revisar
+## R10 ##  Capacidad de la caja
 model.addConstrs(
     (
         volCaja
@@ -231,7 +184,7 @@ model.addConstrs(
     name=" Capacidad de la caja ",
 )
 
-## R12 ## Una caja se genera cuando se le entregan alimentos
+## R11 ## Una caja se genera cuando se le entregan alimentos
 ##
 model.addConstrs(
     (
@@ -252,7 +205,7 @@ model.addConstrs(
     name="se genera caja cuando se le dan alimentos -- 2",
 )
 
-# ## R13 ## Relacion de variable I_ij con X_ijt
+## R12 ## Relacion de variable I_ij con X_ijt
 model.addConstrs(
     (
         bAlimentoCaja[alimento, caja] * 1000000000 >= qAlimentoCaja[alimento, caja, dia]
@@ -270,6 +223,17 @@ model.addConstrs(
         for dia in dias
     ),
     name="Relacion sin multiplicador de I_ij con X_ijt",
+)
+
+## R13 ## Máxima cantidad de un mismo producto por caja:
+model.addConstrs(
+    (
+        quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
+        <= maxProductosCaja
+        for caja in cajas
+        for dia in dias
+    ),
+    name="Maxima cantidad de unidades por caja",
 )
 
 
@@ -318,12 +282,16 @@ objective = quicksum(bCaja[caja, dia] for caja in cajas for dia in dias)
 model.setObjective(objective, GRB.MAXIMIZE)
 
 model.optimize()
+
+
 #### RESULTADO ####
 # model.printAttr("X")
 # print("\n -------------------- \n")
-# # # #### HOLGURAS ####
+#### HOLGURAS ####
 # for constr in model.getConstrs():
 #     print(constr, constr.getAttr("slack"))
+
+
 ## Enlistar y Guardar Variables en results.txt ##
 # Metodo obtenido de:
 #   https://www.gurobi.com/documentation/9.1/quickstart_mac/inspecting_the_solution.html
@@ -333,7 +301,7 @@ print("\n -------------------- \n")
 print("La lista de variables tiene largo: " + str(len(var)))
 print("\n -------------------- \n")
 print("Ahora imprimimos la lista entera: \n")
-i = 0  # simple counter 
+i = 0  # simple counter
 for v in var:
     stttr = str(v.varName) + "=+=" + str(v.x) + "\n"
     file.write(stttr)
