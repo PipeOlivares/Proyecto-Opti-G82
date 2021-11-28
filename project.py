@@ -3,6 +3,7 @@
 ######################
 from gurobipy import GRB, Model, quicksum
 import resultados
+from procesar_resultado import menus_principal
 
 #### PARAMETROS ####
 from abrir_datos import (
@@ -179,7 +180,7 @@ model.addConstrs(
     name="Cantidad de alimentos en una caja 2",
 )
 
-## R16 ## Vencimiento de los alimentos
+## R16 ## 
 model.addConstrs(
     (
         quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
@@ -317,35 +318,27 @@ objective = quicksum(bCaja[caja, dia] for caja in cajas for dia in dias)
 model.setObjective(objective, GRB.MAXIMIZE)
 
 model.optimize()
-
-
 #### RESULTADO ####
 # model.printAttr("X")
 # print("\n -------------------- \n")
-
 # # # #### HOLGURAS ####
 # for constr in model.getConstrs():
 #     print(constr, constr.getAttr("slack"))
-
 ## Enlistar y Guardar Variables en results.txt ##
 # Metodo obtenido de:
 #   https://www.gurobi.com/documentation/9.1/quickstart_mac/inspecting_the_solution.html
-
-
 var = model.getVars()
 file = open("results.csv", "w")
-
 print("\n -------------------- \n")
 print("La lista de variables tiene largo: " + str(len(var)))
 print("\n -------------------- \n")
 print("Ahora imprimimos la lista entera: \n")
-
-i = 0  # simple counter
-
+i = 0  # simple counter 
 for v in var:
     stttr = str(v.varName) + "=+=" + str(v.x) + "\n"
     file.write(stttr)
-    print(v.varName, v.x)
+    # print(v.varName, v.x)
+print("\nOptimizado\n")
 
-
+menus_principal()
 # print(mostrar_resultados(csv))

@@ -1,4 +1,4 @@
-
+from gurobipy import GRB, Model, quicksum
 X_ijt = []
 dias = [i for i in range(15)]
 I_ij = []
@@ -161,16 +161,41 @@ for producto_bodega in B_it:
 #     filaa = "{:<20} {:<11}".format(key,fila_v)
 #     print (filaa)
 
+Qalimento_comprar = {}
+for producto_comprar in F_it:
+    if producto_comprar[0] not in Qalimento_comprar.keys():
+        Qalimento_comprar[producto_comprar[0]] = []
+        par = [producto_comprar[1],abs(producto_comprar[2])]
+        Qalimento_comprar[producto_comprar[0]].append(par)
+    else:
+        par = [producto_comprar[1],abs(producto_comprar[2])]
+        Qalimento_comprar[producto_comprar[0]].append(par)
+
+# dias_c = ""
+# print ("\n{:>20} \n".format("INVENTARIO PRODUCTOS"))
+# valores_dias = [f"dia {i}" for i in range(15)]
+# for day in valores_dias:
+#     dias_c += "{:<8}".format(day)
+# print("{:<20} {:<11}".format("PRODUCTO",dias_c))
+# filas = []
+# for key,value in Qalimento_comprar.items():
+#     fila_v = ""
+#     for vals in value:
+#         fila_v += "{:<8}".format(str(int(vals[1])))
+#     filaa = "{:<20} {:<11}".format(key,fila_v)
+#     print (filaa)
+
+
 def menus_principal():
     f = 0
-    
     while f == 0:
         print("\n MENU")
         print("1 - Ver todas las cajas por dia")
         print("2 - Ver cajas en dia especifico")
         print("3 - Ver presupuestos por dia")
         print("4 - Ver inventario de productos por dia")
-        print("5 - Salir")
+        print("5 - Ver alimentos comprados")
+        print("6 - Salir")
         oopcion = input("Selecciones una opcion: ")
         try:
             oopcion = int(oopcion)
@@ -210,7 +235,7 @@ def menus_principal():
             elif oopcion == 3:
                 print ("\n{:>20} \n".format("PRESUPUESTO"))
                 for i in range(len(Z_t)):
-                    print ("DIA: {:<10} PRESUPUESTO: {:<12} ".format(Z_t[i][0],Z_t[i][1]))
+                    print ("DIA: {:<10} PRESUPUESTO: {:<12} ".format(Z_t[i][0],int(Z_t[i][1])))
 
 
             elif oopcion == 4:
@@ -227,11 +252,28 @@ def menus_principal():
                         fila_v += "{:<8}".format(str(int(vals[1])))
                     filaa = "{:<20} {:<11}".format(key,fila_v)
                     print (filaa)
-                
-
+            
             elif oopcion == 5:
+                dias_c = ""
+                print ("\n{:>20} \n".format("INVENTARIO PRODUCTOS"))
+                valores_dias = [f"dia {i}" for i in range(15)]
+                for day in valores_dias:
+                    dias_c += "{:<8}".format(day)
+                print("{:<20} {:<11}".format("PRODUCTO",dias_c))
+                filas = []
+                for key,value in Qalimento_comprar.items():
+                    fila_v = ""
+                    for vals in value:
+                        fila_v += "{:<8}".format(str(int(vals[1])))
+                    filaa = "{:<20} {:<11}".format(key,fila_v)
+                    print (filaa)
+
+            elif oopcion == 6:
                 f = 1
 
         except ValueError : 
             print("Intenta de nuevo")
-menus_principal()
+# menus_principal()
+# print(F_it)
+
+
