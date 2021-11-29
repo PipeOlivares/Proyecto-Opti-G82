@@ -299,7 +299,7 @@ model.optimize()
 
 #### RESULTADO ####
 # model.printAttr("X")
-holg = open("holguras.csv", "w")
+holg = open("holguras.csv", "w", encoding="UTF-8")
 
 for constr in model.getConstrs():
     line = str(constr) + "=+=" + str(constr.getAttr("slack")) + "\n"
@@ -309,7 +309,7 @@ for constr in model.getConstrs():
 # Metodo obtenido de:
 #   https://www.gurobi.com/documentation/9.1/quickstart_mac/inspecting_the_solution.html
 var = model.getVars()
-file = open("results.csv", "w")
+file = open("results.csv", "w", encoding="UTF-8")
 print("\n -------------------- \n")
 print("La lista de variables tiene largo: " + str(len(var)))
 print("\n -------------------- \n")
