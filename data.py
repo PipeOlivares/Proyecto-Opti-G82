@@ -1,35 +1,14 @@
 ##############
 #### DATA ####
 ##############
-# from abrir_datos import (
-#     alimentos,
-#     volAlimento,
-#     qInicialAlimento,
-#     costoAlimento,
-#     vencimientoPeriodo,
-#     qNutrientesAlimentos,
-#     minProductos,
-#     maxProductos,
-#     maxCajas    ,
-#     volBodega   ,
-#     qPersonas   ,
-#     volCaja     ,
-#     minNutriente
-# )
-
-# qNutrientesAlimentos, volCaja, minNutriente, qPersonas, minProductos, maxProductos,
-# vencimiento, volAlimento, qRescatado, qInicialAlimento, qDonaciones, qInicialDinero,
-# costoAlimento, vencimientoPeriodo, volBodega, maxCajas
-
 
 #### CONJUNTOS ####
 
-# print(alimentos)
 
 dias = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 ## considerar parametro K_t para el numero de cajas posibles en un dia
-cajas = [i for i in range(1, 41)]
+cajas = [i for i in range(1, 56)]
 
 ## caso de nutrientes que no esten n un alimentos sera 0
 nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
@@ -40,6 +19,12 @@ nutrientes = ["proteinas", "carbohidratos", "grasas", "calorias"]
 
 ## T ## Tarifa inicial segun numero de repartidores
 tarifa = int(150000)
+
+
+#####################################################################################
+## El resto de los datos son importados directamente de los .csv en abrir_datos.py ##
+#####################################################################################
+
 
 ## U_ik ## Valor nutricional del alimento i con respecto al nutriente k
 # print(qNutrientesAlimentos)

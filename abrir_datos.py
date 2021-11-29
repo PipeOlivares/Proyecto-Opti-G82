@@ -96,13 +96,15 @@ with open("csvs/Datos - cantidad-productos.csv") as productos:
                 max_prod,
                 max_cajas,
                 max_prod_caja,
+                maxProductosCajaUnitario,
                 vol_bodega,
                 personas,
                 vol_caja,
             ) = r
             minProductos = float(min_prod)
             maxProductos = float(max_prod)
-            maxProductosCaja = float(max_prod_caja)
+            M_T = float(max_prod_caja)
+            M_P = float(maxProductosCajaUnitario)
             maxCajas = float(max_cajas)
             volBodega = float(vol_bodega)
             qPersonas = float(personas)
