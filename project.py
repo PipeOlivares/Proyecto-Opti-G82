@@ -228,8 +228,7 @@ model.addConstrs(
 ## R13 ## Máxima cantidad de un mismo producto por caja:
 model.addConstrs(
     (
-        qAlimentoCaja[alimento, caja, dia] 
-        <= M_P
+        qAlimentoCaja[alimento, caja, dia] <= M_P
         for alimento in alimentos
         for caja in cajas
         for dia in dias
@@ -240,12 +239,11 @@ model.addConstrs(
 ## R14 ## Máxima cantidad de productos totales (no variabilidad)
 model.addConstrs(
     (
-        quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
-        <= M_T
+        quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos) <= M_T
         for caja in cajas
         for dia in dias
     ),
-    name="Maxima cantidad de unidades por caja",
+    name="Maxima cantidad de productos totales (no variabilidad)",
 )
 
 
