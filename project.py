@@ -12,10 +12,11 @@ from abrir_datos import (
     qInicialAlimento,
     costoAlimento,
     qNutrientesAlimentos,
+    M_P,
     qRescatado,
     minProductos,
     maxProductos,
-    maxProductosCaja,
+    M_T,
     maxCajas,
     volBodega,
     qPersonas,
@@ -227,8 +228,20 @@ model.addConstrs(
 ## R13 ## Máxima cantidad de un mismo producto por caja:
 model.addConstrs(
     (
+        qAlimentoCaja[alimento, caja, dia] 
+        <= M_P
+        for alimento in alimentos
+        for caja in cajas
+        for dia in dias
+    ),
+    name="Maxima cantidad de unidades por caja",
+)
+
+## R14 ## Máxima cantidad de productos totales (no variabilidad)
+model.addConstrs(
+    (
         quicksum(qAlimentoCaja[alimento, caja, dia] for alimento in alimentos)
-        <= maxProductosCaja
+        <= M_T
         for caja in cajas
         for dia in dias
     ),
@@ -246,6 +259,7 @@ model.addConstrs(
     ),
     name="Naturaleza X_ijt",
 )
+
 
 ## N2 ## Naturaleza I_ij
 ## COMO ES BINARIA, NO NECESITA RESTRICCION DE NATURALEZA
