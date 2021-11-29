@@ -200,18 +200,30 @@ def menus_principal():
         try:
             oopcion = int(oopcion)
             if oopcion == 1:
+                cantidadmax = 0
+                cantidadmin = 1000
+                sumas = []
                 for key,value in cajas_prod_dia.items():
                     print (f"---------------- DIA {key}-----------------")
                     if key != 0:
                         for item in value:
-                            print (f"\n--------{item[0]}----------------")
-                            print ("{:<20} {:<21} ".format("PRODUCTOS","CANTIDAD"))
-                            for i in range(1,len(item)):
-                                print ("{:<20} {:<21} ".format(item[i][0],item[i][1]))
+                            if len(item) > 1:
+                                sum_caja = 0
+                                print (f"\n--------{item[0]}----------------")
+                                print ("{:<20} {:<21} ".format("PRODUCTOS","CANTIDAD"))
+                                for i in range(1,len(item)):
+                                    print ("{:<20} {:<21} ".format(item[i][0],item[i][1]))
+                                    sum_caja += int(item[i][1])
+                                sumas.append(sum_caja)
+                                cantidadmax = max(sumas)
+                                cantidadmin = min(sumas)
+                                prom = sum(sumas)/len(sumas)
+                print(f"la caja con mas productos tiene: {cantidadmax} y la con minimo tiene: {cantidadmin} y el promedio es {prom}")
             elif oopcion == 2:
                 g = 0
                 while g == 0:
                     diias = input("ingrese el dia a revisar (0-14): ")
+                    sumas = []
                     try: 
                         diias = int(diias)
                         if   not (int(diias) in dias):
@@ -223,12 +235,21 @@ def menus_principal():
                                 print (f"---------------- DIA {diias}-----------------")
                                 for item in cajas_prod_dia[int(diias)]:
                                     if len(item)>1:
+                                        sum_caja = 0
                                         print("-----------------------------")
                                         print ("\n{:>17}".format(item[0]))
                                         print ("{:<20} {:<21} ".format("PRODUCTO","CANTIDAD"))
                                         for prod in item: 
                                             if prod != item[0]:   
                                                 print ("{:<25} {:<26} ".format(prod[0],prod[1]))
+                                                sum_caja += int(prod[1])
+                                        sumas.append(sum_caja)
+                                        cantidadmax = max(sumas)
+                                        cantidadmin = min(sumas)
+                                        prom = sum(sumas)/len(sumas)
+                        print(f"la caja con mas productos tiene: {cantidadmax} y la con minimo tiene: {cantidadmin} y el promedio es {prom}")
+
+
                     except ValueError:
                         print("Intenta de nuevo")
 
