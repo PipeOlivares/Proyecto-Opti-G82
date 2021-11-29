@@ -171,6 +171,16 @@ for producto_comprar in F_it:
         par = [producto_comprar[1],abs(producto_comprar[2])]
         Qalimento_comprar[producto_comprar[0]].append(par)
 
+
+Qalimentos_usados = {}
+for alimentos_usado in X_ijt:
+    if alimentos_usado[0] not in Qalimentos_usados.keys():
+        Qalimentos_usados[alimentos_usado[0]] = [0 for i  in range(15)]
+        # print(Qalimentos_usados[alimentos_usado[0]][alimentos_usado[2]])
+        Qalimentos_usados[alimentos_usado[0]][alimentos_usado[2]] += int(alimentos_usado[3])
+    else:
+        Qalimentos_usados[alimentos_usado[0]][alimentos_usado[2]] += alimentos_usado[3]
+
 # dias_c = ""
 # print ("\n{:>20} \n".format("INVENTARIO PRODUCTOS"))
 # valores_dias = [f"dia {i}" for i in range(15)]
@@ -195,7 +205,8 @@ def menus_principal():
         print("3 - Ver presupuestos por dia")
         print("4 - Ver inventario de productos por dia")
         print("5 - Ver alimentos comprados")
-        print("6 - Salir")
+        print("6 - Ver alimentos usados por dia")
+        print("7 - Salir")
         oopcion = input("Selecciones una opcion: ")
         try:
             oopcion = int(oopcion)
@@ -306,6 +317,24 @@ def menus_principal():
                     print (filaa)
 
             elif oopcion == 6:
+                days = ""
+                print ("\n{:>20} \n".format("PRODUCTOS USADOS POR DIA"))
+                valores_dias = [f"dia {i}" for i in range(15)]
+                for day in valores_dias:
+                    days += "{:<8}".format(day)
+                print("{:<20} {:<11}".format("PRODUCTO",days))
+                filas = []
+                for key,value in Qalimentos_usados.items():
+                    fila_v = ""
+                    for vals in value:
+                        fila_v += "{:<8}".format(str(int(vals)))
+                    filaa = "{:<20} {:<11}".format(key,fila_v)
+                    print (filaa)
+
+
+
+
+            elif oopcion == 7:
                 f = 1
 
         except ValueError : 
@@ -314,3 +343,4 @@ def menus_principal():
 # print(F_it)
 
 
+# print (Z_t)

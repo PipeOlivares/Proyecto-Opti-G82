@@ -320,6 +320,7 @@ for v in var:
     file.write(stttr)
     # print(v.varName, v.x)
 print("\nOptimizado\n")
+file.close()
 
 menus_principal()
 # print(mostrar_resultados(csv))
