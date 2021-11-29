@@ -299,11 +299,11 @@ model.optimize()
 
 #### RESULTADO ####
 # model.printAttr("X")
-# print("\n -------------------- \n")
-#### HOLGURAS ####
-# for constr in model.getConstrs():
-#     print(constr, constr.getAttr("slack"))
+holg = open("holguras.csv", "w")
 
+for constr in model.getConstrs():
+    line = str(constr) + "=+=" + str(constr.getAttr("slack")) + "\n"
+    holg.write(line)
 
 ## Enlistar y Guardar Variables en results.txt ##
 # Metodo obtenido de:
